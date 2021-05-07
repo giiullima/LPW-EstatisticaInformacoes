@@ -1,36 +1,44 @@
 <h1>Cadastro de Pessoas</h1>
 
-<form ngForm name="cadastro">
-  <p>Nome:<input type="text" name="nome" [(ngModel)]="nome">
-     Idade:<input type="number" name="idade" [(ngModel)]="idade">
-  <button (click)="adicionar()">OK</button></p>
+<form [formGroup]="formUser">
+  <p>
+    Nome:<input type="text" name="nome" formControlName="nome">
+     E-mail:<input type="text" name="email" formControlName="email">
+     Data de nascimento:<input type="date" name="birthday" formControlName="birthday">
+  <button (click)="adicionar()">Cadastrar</button>
+</p>
 </form>
 
 <style>
   table, th, td {
     border: 0.1px solid black;
-  } 
+  }
 </style>
 
-<b>Pessoas Cadastradas</b>
+<h1>Listagem de Pessoas Cadastradas</h1>
 
 <table>
   <tr>
     <td><b>Nome</b></td>
+    <td><b>E-mail</b></td>
+    <td><b>Data de Nascimento</b></td>
     <td><b>Idade</b></td>
     <td><b>Excluir</b></td>
   </tr>
-  <tr *ngFor="let pessoa of pessoas; let i = index">
-    <td > {{ pessoa.nome }} </td>
-    <td> {{ pessoa.idade }}</td>
-    
-    <td><button (click)="excluir(pessoa)">X</button></td>
+  <tr *ngFor="let pessoa of listPessoas; let i = index">
+    <td> {{ pessoa?.nome }} </td>
+    <td> {{ pessoa?.email }} </td>
+    <td> {{ pessoa?.birthday | date:"MM/dd/yy"}} </td>
+    <td> {{ pessoa?.age }} </td>
+
+    <td><button (click)="remover(i)">X</button></td>
   </tr>
 </table>
 
-<p>Total de pessoas cadastradas: {{totalizador}}</p>
+<h1>Estatísticas</h1>
+<p>Total de pessoas cadastradas: {{getStatistic?.total}}</p>
 
-<div *ngIf="!null && jovem && velho">
-  <p>Pessoa mais jovem:{{jovem.nome}}, com {{jovem.idade}} anos</p> 
-  <p>Pessoa mais idosa:{{velho.nome}}, com {{velho.idade}} anos</p> 
+<div *ngIf="getStatistic?.jovem && getStatistic?.velho">
+  <p>Pessoa mais jovem:{{getStatistic?.jovem?.nome}}, com {{getStatistic?.jovem?.age}} anos</p>
+  <p>Pessoa mais idosa:{{getStatistic?.velho?.nome}}, com {{getStatistic?.velho?.age}} anos</p>
 </div>
